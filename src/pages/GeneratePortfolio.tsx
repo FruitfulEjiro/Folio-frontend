@@ -69,7 +69,7 @@ const GeneratePortfolio = () => {
       setUsernameStatus(prev => ({ ...prev, isChecking: true }));
 
       try {
-         const response = await axios.get(`http://localhost:3000/portfolio/check-username/${username}`, {
+         const response = await axios.get(`https://folio-hszb.onrender.com/portfolio/check-username/${username}`, {
             withCredentials: true,
          });
 
@@ -266,7 +266,7 @@ const GeneratePortfolio = () => {
             submissionData.projects.push(processedProject);
          }
          // Submit to API
-         const response = await axios.post("http://localhost:3000/portfolio/generate-portfolio", submissionData, {
+         const response = await axios.post("https://folio-hszb.onrender.com/portfolio/generate-portfolio", submissionData, {
             headers: {
                "Content-Type": "application/json",
             },
@@ -386,7 +386,7 @@ const GeneratePortfolio = () => {
                               </SelectTrigger>
                               <SelectContent>
                                  <SelectItem value="modern">Modern</SelectItem>
-                                 <SelectItem value="classic">Classic</SelectItem>
+                                 <SelectItem value="classic">Professional</SelectItem>
                                  <SelectItem value="creative">Creative</SelectItem>
                                  <SelectItem value="minimal">Minimal</SelectItem>
                               </SelectContent>
