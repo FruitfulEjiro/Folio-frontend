@@ -2,7 +2,7 @@ import axios from "axios";
 import { PortfolioData, TemplateId } from "@/types/portfolio";
 
 // Configure axios base URL - update this to match your backend
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = "https://folio-hszb.onrender.com";
 
 const api = axios.create({
    baseURL: API_BASE_URL,
@@ -20,19 +20,6 @@ api.interceptors.request.use((config) => {
    }
    return config;
 });
-
-// export interface CreatePortfolioRequest {
-//    personalInfo: PortfolioData["personalInfo"];
-//    experience: PortfolioData["experience"];
-//    education: PortfolioData["education"];
-//    projects: PortfolioData["projects"];
-//    skills: PortfolioData["skills"];
-//    templateId: TemplateId;
-// }
-
-// export interface UpdatePortfolioRequest extends Partial<CreatePortfolioRequest> {
-//    id: string;
-// }
 
 export const portfolioService = {
    // Fetch portfolio by unique ID

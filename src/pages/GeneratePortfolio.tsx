@@ -81,7 +81,7 @@ const GeneratePortfolio = () => {
             message: isAvailable === "success" ? "✓ Username is available" : "✗ Username is already taken"
          });
       } catch (error) {
-         console.error('Username check error:', error);
+         console.log('Username check error:', error);
          setUsernameStatus({
             isChecking: false,
             isAvailable: null,
