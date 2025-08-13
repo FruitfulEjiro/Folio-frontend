@@ -35,31 +35,6 @@ export const portfolioService = {
       }
    },
 
-   // Create a new portfolio
-   //  async createPortfolio(portfolioData: CreatePortfolioRequest): Promise<{ portfolioId: string; url: string }> {
-   //     try {
-   //        const response = await api.post("/portfolios", portfolioData);
-   //        return {
-   //           portfolioId: response.data.id,
-   //           url: response.data.url || `/portfolio/${response.data.id}`,
-   //        };
-   //     } catch (error) {
-   //        console.error("Error creating portfolio:", error);
-   //        throw new Error("Failed to create portfolio");
-   //     }
-   //  },
-
-   // Update existing portfolio
-   //  async updatePortfolio(portfolioData: UpdatePortfolioRequest): Promise<PortfolioData> {
-   //     try {
-   //        const response = await api.put(`/portfolios/${portfolioData.id}`, portfolioData);
-   //        return response.data;
-   //     } catch (error) {
-   //        console.error("Error updating portfolio:", error);
-   //        throw new Error("Failed to update portfolio");
-   //     }
-   //  },
-
    // Delete portfolio
    async deletePortfolio(portfolioId: string): Promise<void> {
       try {
