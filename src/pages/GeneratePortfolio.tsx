@@ -386,7 +386,7 @@ const GeneratePortfolio = () => {
                               </SelectTrigger>
                               <SelectContent>
                                  <SelectItem value="modern">Modern</SelectItem>
-                                 <SelectItem value="classic">Professional</SelectItem>
+                                 <SelectItem value="professional">Professional</SelectItem>
                                  <SelectItem value="creative">Creative</SelectItem>
                                  <SelectItem value="minimal">Minimal</SelectItem>
                               </SelectContent>
