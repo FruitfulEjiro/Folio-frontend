@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,8 +9,33 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import Header from "@/components/Header";
 import { Camera, Mail, User, Globe, Calendar, Edit3 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Profile = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
+
+  // Helper function to get initials from user name
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(word => word.charAt(0))
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  // Helper function to split full name into first and last name
+  const getFirstName = (name: string) => {
+    return name.split(' ')[0] || '';
+  };
+
+  const getLastName = (name: string) => {
+    const parts = name.split(' ');
+    return parts.length > 1 ? parts.slice(1).join(' ') : '';
+  };
+
   return (
     <div className="min-h-screen bg-gradient-hero">
       <Header />
@@ -23,7 +49,9 @@ const Profile = () => {
                 <div className="relative group">
                   <Avatar className="w-24 h-24 mb-4">
                     <AvatarImage src="/placeholder.svg" alt="Profile" />
-                    <AvatarFallback className="bg-gradient-primary text-white text-lg">JD</AvatarFallback>
+                    <AvatarFallback className="bg-gradient-primary text-white text-lg">
+                      {user ? getInitials(user.name) : 'U'}
+                    </AvatarFallback>
                   </Avatar>
                   <Button 
                     size="icon" 
@@ -34,8 +62,8 @@ const Profile = () => {
                   </Button>
                 </div>
                 
-                <h2 className="text-xl font-semibold mb-1">John Doe</h2>
-                <p className="text-muted-foreground mb-3">Frontend Developer</p>
+                <h2 className="text-xl font-semibold mb-1">{user?.name || 'User Name'}</h2>
+                <p className="text-muted-foreground mb-3">Portfolio Creator</p>
                 
                 <Badge variant="outline" className="mb-4">
                   Pro Member
@@ -44,17 +72,18 @@ const Profile = () => {
                 <div className="w-full space-y-3 text-sm">
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Mail className="w-4 h-4" />
-                    john.doe@example.com
+                    {user?.email || 'user@example.com'}
                   </div>
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Globe className="w-4 h-4" />
-                    johndoe.dev
+                    {user?.name ? `${user.name.toLowerCase().replace(/\s+/g, '')}.portfolio` : 'portfolio.site'}
                   </div>
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Calendar className="w-4 h-4" />
-                    Joined March 2024
+                    Member since {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                   </div>
                 </div>
+                
               </div>
             </CardContent>
           </Card>
@@ -77,7 +106,8 @@ const Profile = () => {
                     <Label htmlFor="firstName">First Name</Label>
                     <Input 
                       id="firstName" 
-                      defaultValue="John"
+                      defaultValue={user ? getFirstName(user.name) : ''}
+                      placeholder="Enter your first name"
                       className="bg-background/50 border-border focus:border-primary"
                     />
                   </div>
@@ -85,7 +115,8 @@ const Profile = () => {
                     <Label htmlFor="lastName">Last Name</Label>
                     <Input 
                       id="lastName" 
-                      defaultValue="Doe"
+                      defaultValue={user ? getLastName(user.name) : ''}
+                      placeholder="Enter your last name"
                       className="bg-background/50 border-border focus:border-primary"
                     />
                   </div>
@@ -96,7 +127,8 @@ const Profile = () => {
                   <Input 
                     id="email" 
                     type="email" 
-                    defaultValue="john.doe@example.com"
+                    defaultValue={user?.email || ''}
+                    placeholder="Enter your email address"
                     className="bg-background/50 border-border focus:border-primary"
                   />
                 </div>
@@ -105,7 +137,8 @@ const Profile = () => {
                   <Label htmlFor="title">Professional Title</Label>
                   <Input 
                     id="title" 
-                    defaultValue="Frontend Developer"
+                    defaultValue=""
+                    placeholder="e.g., Frontend Developer, Designer, etc."
                     className="bg-background/50 border-border focus:border-primary"
                   />
                 </div>
@@ -114,9 +147,9 @@ const Profile = () => {
                   <Label htmlFor="bio">Bio</Label>
                   <Textarea 
                     id="bio" 
-                    placeholder="Tell us about yourself..."
+                    placeholder="Tell us about yourself, your skills, and your passion..."
                     className="bg-background/50 border-border focus:border-primary min-h-[100px]"
-                    defaultValue="Passionate frontend developer with 5+ years of experience creating beautiful, responsive web applications. Love working with React, TypeScript, and modern web technologies."
+                    defaultValue=""
                   />
                 </div>
                 
@@ -125,7 +158,7 @@ const Profile = () => {
                   <Input 
                     id="website" 
                     placeholder="https://yourwebsite.com"
-                    defaultValue="https://johndoe.dev"
+                    defaultValue=""
                     className="bg-background/50 border-border focus:border-primary"
                   />
                 </div>

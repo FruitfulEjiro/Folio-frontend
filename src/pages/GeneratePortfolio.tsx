@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState, useEffect, useCallback } from "react";
+import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const GeneratePortfolio = () => {
    const { toast } = useToast();
+   const location = useLocation();
    const [isSubmitting, setIsSubmitting] = useState(false);
    const [usernameStatus, setUsernameStatus] = useState({
       isChecking: false,
@@ -29,10 +31,6 @@ const GeneratePortfolio = () => {
       skillList: [
          { name: "", percent: "" },
          { name: "", percent: "" },
-         { name: "", percent: "" },
-         { name: "", percent: "" },
-         { name: "", percent: "" },
-         { name: "", percent: "" },
       ],
       socials: [],
       projects: [
@@ -40,6 +38,16 @@ const GeneratePortfolio = () => {
          { title: "", summary: "", link: "", image: null},
       ],
    });
+
+   // Effect to handle pre-selected template from URL parameters
+   useEffect(() => {
+      const searchParams = new URLSearchParams(location.search);
+      const templateParam = searchParams.get('template');
+      
+      if (templateParam && ['modern', 'professional', 'creative', 'minimal'].includes(templateParam)) {
+         setFormData(prev => ({ ...prev, template: templateParam }));
+      }
+   }, [location.search]);
 
    const handleInputChange = (field, value) => {
       setFormData((prev) => ({ ...prev, [field]: value }));
@@ -133,6 +141,18 @@ const GeneratePortfolio = () => {
    const removeProject = (index) => {
       const newProjects = formData.projects.filter((_, i) => i !== index);
       setFormData((prev) => ({ ...prev, projects: newProjects }));
+   };
+
+   const addSkill = () => {
+      setFormData((prev) => ({
+         ...prev,
+         skillList: [...prev.skillList, { name: "", percent: "" }],
+      }));
+   };
+
+   const removeSkill = (index) => {
+      const newSkills = formData.skillList.filter((_, i) => i !== index);
+      setFormData((prev) => ({ ...prev, skillList: newSkills }));
    };
 
    // Convert file to base64
@@ -497,34 +517,59 @@ const GeneratePortfolio = () => {
 
                {/* Skills Section */}
                <Card className="shadow-card">
-                  <CardHeader>
+                  <CardHeader className="flex flex-row items-center justify-between">
                      <CardTitle className="text-2xl text-primary">Skills</CardTitle>
+                     <Button
+                        type="button"
+                        onClick={addSkill}
+                        variant="outline"
+                        className="border-primary/20 text-primary hover:bg-primary/5"
+                     >
+                        Add Skill
+                     </Button>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="space-y-6">
                      {formData.skillList.map((skill, index) => (
-                        <div key={index} className="grid md:grid-cols-2 gap-4">
-                           <div className="space-y-2">
-                              <Label htmlFor={`skill-name-${index}`}>Skill {index + 1} Name</Label>
-                              <Input
-                                 id={`skill-name-${index}`}
-                                 value={skill.name}
-                                 onChange={(e) => handleSkillChange(index, "name", e.target.value)}
-                                 placeholder="React.js"
-                                 className="border-border/50"
-                              />
+                        <div key={index} className="space-y-4 p-4 border border-border/50 rounded-lg bg-muted/30">
+                           <div className="flex justify-between items-center">
+                              <h4 className="font-semibold text-lg">Skill {index + 1}</h4>
+                              {formData.skillList.length > 2 && (
+                                 <Button
+                                    type="button"
+                                    onClick={() => removeSkill(index)}
+                                    variant="outline"
+                                    size="sm"
+                                    className="text-destructive border-destructive/20 hover:bg-destructive/5"
+                                 >
+                                    Remove
+                                 </Button>
+                              )}
                            </div>
-                           <div className="space-y-2">
-                              <Label htmlFor={`skill-percent-${index}`}>Proficiency (%)</Label>
-                              <Input
-                                 id={`skill-percent-${index}`}
-                                 type="number"
-                                 min="0"
-                                 max="100"
-                                 value={skill.percent}
-                                 onChange={(e) => handleSkillChange(index, "percent", e.target.value)}
-                                 placeholder="85"
-                                 className="border-border/50"
-                              />
+                           
+                           <div className="grid md:grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                 <Label htmlFor={`skill-name-${index}`}>Skill Name</Label>
+                                 <Input
+                                    id={`skill-name-${index}`}
+                                    value={skill.name}
+                                    onChange={(e) => handleSkillChange(index, "name", e.target.value)}
+                                    placeholder="React.js"
+                                    className="border-border/50"
+                                 />
+                              </div>
+                              <div className="space-y-2">
+                                 <Label htmlFor={`skill-percent-${index}`}>Proficiency (%)</Label>
+                                 <Input
+                                    id={`skill-percent-${index}`}
+                                    type="number"
+                                    min="0"
+                                    max="100"
+                                    value={skill.percent}
+                                    onChange={(e) => handleSkillChange(index, "percent", e.target.value)}
+                                    placeholder="85"
+                                    className="border-border/50"
+                                 />
+                              </div>
                            </div>
                         </div>
                      ))}

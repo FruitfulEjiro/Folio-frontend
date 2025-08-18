@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -17,7 +18,8 @@ const templates = [
     rating: 4.9,
     downloads: 1240,
     isPremium: false,
-    tags: ["Minimal", "Developer", "Clean"]
+    tags: ["Minimal", "Developer", "Clean"],
+    templateValue: "modern"
   },
   {
     id: 2,
@@ -28,7 +30,8 @@ const templates = [
     rating: 4.8,
     downloads: 980,
     isPremium: true,
-    tags: ["Creative", "Bold", "Artistic"]
+    tags: ["Creative", "Bold", "Artistic"],
+    templateValue: "creative"
   },
   {
     id: 3,
@@ -39,7 +42,8 @@ const templates = [
     rating: 4.7,
     downloads: 756,
     isPremium: false,
-    tags: ["Professional", "Corporate", "Business"]
+    tags: ["Professional", "Corporate", "Business"],
+    templateValue: "professional"
   },
   {
     id: 4,
@@ -50,7 +54,8 @@ const templates = [
     rating: 5.0,
     downloads: 1450,
     isPremium: true,
-    tags: ["Visual", "Designer", "Showcase"]
+    tags: ["Visual", "Designer", "Showcase"],
+    templateValue: "creative"
   },
   {
     id: 5,
@@ -61,7 +66,8 @@ const templates = [
     rating: 4.6,
     downloads: 623,
     isPremium: false,
-    tags: ["Photography", "Visual", "Gallery"]
+    tags: ["Photography", "Visual", "Gallery"],
+    templateValue: "minimal"
   },
   {
     id: 6,
@@ -72,14 +78,21 @@ const templates = [
     rating: 4.8,
     downloads: 892,
     isPremium: true,
-    tags: ["Tech", "Futuristic", "Innovation"]
+    tags: ["Tech", "Futuristic", "Innovation"],
+    templateValue: "modern"
   }
 ];
 
 const ExploreTemplates = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("popular");
+
+  const handleUseTemplate = (templateValue: string) => {
+    // Navigate to generate portfolio page with the selected template
+    navigate(`/generate?template=${templateValue}`);
+  };
 
   const filteredTemplates = templates.filter(template => {
     const matchesSearch = template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -172,7 +185,12 @@ const ExploreTemplates = () => {
                         <Eye className="w-4 h-4 mr-2" />
                         Preview
                       </Button>
-                      <Button size="sm" variant="gradient" className="flex-1">
+                      <Button 
+                        size="sm" 
+                        variant="gradient" 
+                        className="flex-1"
+                        onClick={() => handleUseTemplate(template.templateValue)}
+                      >
                         Use Template
                       </Button>
                     </div>
