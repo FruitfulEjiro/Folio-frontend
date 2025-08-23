@@ -20,7 +20,8 @@ const Header = () => {
   };
 
   // Helper function to get initials from user name
-  const getInitials = (name: string) => {
+  const getInitials = (name?: string) => {
+    if (!name) return 'U';
     return name
       .split(' ')
       .map(word => word.charAt(0))
@@ -50,18 +51,18 @@ const Header = () => {
           </Link>
           {isAuthenticated && (
             <Link 
-              to="/profile" 
+              to="/generate" 
               className={`hover:text-primary transition-colors ${
                 location.pathname === '/profile' ? 'text-primary' : 'text-muted-foreground'
               }`}
             >
-              Profile
+              Generate Portfolio
             </Link>
           )}
         </nav>
 
         <div className="flex items-center gap-3">
-          {isAuthenticated ? (
+          {/* {isAuthenticated ? (
             <>
               <Button 
                 onClick={handleGeneratePortfolio}
@@ -79,7 +80,7 @@ const Header = () => {
                     <Avatar className="h-8 w-8">
                       <AvatarImage src="/placeholder.svg" alt="Profile" />
                       <AvatarFallback className="bg-gradient-primary text-white text-xs">
-                        {user ? getInitials(user.name) : 'U'}
+                        {getInitials(user?.name)}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
@@ -110,7 +111,7 @@ const Header = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
-          ) : (
+          ) : ( */}
             <>
               <Link to="/login">
                 <Button variant="ghost">Login</Button>
@@ -119,7 +120,7 @@ const Header = () => {
                 <Button variant="gradient">Get Started</Button>
               </Link>
             </>
-          )}
+          {/* )} */}
         </div>
       </div>
     </header>

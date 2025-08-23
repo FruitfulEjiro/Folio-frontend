@@ -12,11 +12,13 @@ import { useToast } from "@/hooks/use-toast";
 const GeneratePortfolio = () => {
    const { toast } = useToast();
    const location = useLocation();
+   const [modalVisible, setModalVisible] = useState(false);
+   const [portfolioData, setPortfolioData] = useState(null);
    const [isSubmitting, setIsSubmitting] = useState(false);
    const [usernameStatus, setUsernameStatus] = useState({
       isChecking: false,
       isAvailable: null,
-      message: ""
+      message: "",
    });
    const [formData, setFormData] = useState({
       fullName: "",
@@ -34,18 +36,18 @@ const GeneratePortfolio = () => {
       ],
       socials: [],
       projects: [
-         { title: "", summary: "", link: "", image: null},
-         { title: "", summary: "", link: "", image: null},
+         { title: "", summary: "", link: "", image: null },
+         { title: "", summary: "", link: "", image: null },
       ],
    });
 
    // Effect to handle pre-selected template from URL parameters
    useEffect(() => {
       const searchParams = new URLSearchParams(location.search);
-      const templateParam = searchParams.get('template');
-      
-      if (templateParam && ['modern', 'professional', 'creative', 'minimal'].includes(templateParam)) {
-         setFormData(prev => ({ ...prev, template: templateParam }));
+      const templateParam = searchParams.get("template");
+
+      if (templateParam && ["modern", "professional", "creative", "minimal"].includes(templateParam)) {
+         setFormData((prev) => ({ ...prev, template: templateParam }));
       }
    }, [location.search]);
 
@@ -59,7 +61,7 @@ const GeneratePortfolio = () => {
          setUsernameStatus({
             isChecking: false,
             isAvailable: null,
-            message: username.length > 0 && username.length < 3 ? "Username must be at least 3 characters" : ""
+            message: username.length > 0 && username.length < 3 ? "Username must be at least 3 characters" : "",
          });
          return;
       }
@@ -69,31 +71,31 @@ const GeneratePortfolio = () => {
          setUsernameStatus({
             isChecking: false,
             isAvailable: false,
-            message: "Username can only contain letters, numbers, underscores, and hyphens"
+            message: "Username can only contain letters, numbers, underscores, and hyphens",
          });
          return;
       }
 
-      setUsernameStatus(prev => ({ ...prev, isChecking: true }));
+      setUsernameStatus((prev) => ({ ...prev, isChecking: true }));
 
       try {
          const response = await axios.get(`https://folio-hszb.onrender.com/portfolio/check-username/${username}`, {
             withCredentials: true,
          });
 
-         console.log(response.data)
+         console.log(response.data);
          const isAvailable = response.data.status;
          setUsernameStatus({
             isChecking: false,
             isAvailable: isAvailable,
-            message: isAvailable === "success" ? "✓ Username is available" : "✗ Username is already taken"
+            message: isAvailable === "success" ? "✓ Username is available" : "✗ Username is already taken",
          });
       } catch (error) {
-         console.log('Username check error:', error);
+         console.log("Username check error:", error);
          setUsernameStatus({
             isChecking: false,
             isAvailable: null,
-            message: "Error checking username availability"
+            message: "Error checking username availability",
          });
       }
    }, []);
@@ -134,7 +136,7 @@ const GeneratePortfolio = () => {
    const addProject = () => {
       setFormData((prev) => ({
          ...prev,
-         projects: [...prev.projects, { title: "", summary: "", link: "", image: null}],
+         projects: [...prev.projects, { title: "", summary: "", link: "", image: null }],
       }));
    };
 
@@ -286,14 +288,20 @@ const GeneratePortfolio = () => {
             submissionData.projects.push(processedProject);
          }
          // Submit to API
-         const response = await axios.post("https://folio-hszb.onrender.com/portfolio/generate-portfolio", submissionData, {
-            headers: {
-               "Content-Type": "application/json",
-            },
-            withCredentials: true,
-         });
+         const response = await axios.post(
+            "https://folio-hszb.onrender.com/portfolio/generate-portfolio",
+            submissionData,
+            {
+               headers: {
+                  "Content-Type": "application/json",
+               },
+               withCredentials: true,
+            }
+         );
 
          const result = response.data.data;
+         setPortfolioData(result);
+         setModalVisible(true);
 
          toast({
             title: "Success!",
@@ -421,8 +429,11 @@ const GeneratePortfolio = () => {
                                  onChange={(e) => handleInputChange("username", e.target.value.toLowerCase())}
                                  placeholder="johndoe"
                                  className={`border-border/50 pr-10 ${
-                                    usernameStatus.isAvailable === true ? 'border-green-500 focus:border-green-500' :
-                                    usernameStatus.isAvailable === false ? 'border-red-500 focus:border-red-500' : ''
+                                    usernameStatus.isAvailable === true
+                                       ? "border-green-500 focus:border-green-500"
+                                       : usernameStatus.isAvailable === false
+                                       ? "border-red-500 focus:border-red-500"
+                                       : ""
                                  }`}
                               />
                               {usernameStatus.isChecking && (
@@ -442,16 +453,21 @@ const GeneratePortfolio = () => {
                               )}
                            </div>
                            {usernameStatus.message && (
-                              <p className={`text-xs ${
-                                 usernameStatus.isAvailable === true ? 'text-green-600' :
-                                 usernameStatus.isAvailable === false ? 'text-red-600' :
-                                 'text-muted-foreground'
-                              }`}>
+                              <p
+                                 className={`text-xs ${
+                                    usernameStatus.isAvailable === true
+                                       ? "text-green-600"
+                                       : usernameStatus.isAvailable === false
+                                       ? "text-red-600"
+                                       : "text-muted-foreground"
+                                 }`}
+                              >
                                  {usernameStatus.message}
                               </p>
                            )}
                            <p className="text-xs text-muted-foreground">
-                              Your portfolio will be available at: yurl.io/<span className="font-medium">{formData.username || 'username'}</span>
+                              Your portfolio will be available at: yurl.io/
+                              <span className="font-medium">{formData.username || "username"}</span>
                            </p>
                         </div>
                      </div>
@@ -545,7 +561,7 @@ const GeneratePortfolio = () => {
                                  </Button>
                               )}
                            </div>
-                           
+
                            <div className="grid md:grid-cols-2 gap-4">
                               <div className="space-y-2">
                                  <Label htmlFor={`skill-name-${index}`}>Skill Name</Label>
@@ -692,6 +708,21 @@ const GeneratePortfolio = () => {
                      <p className="text-sm text-muted-foreground mt-3">
                         Converting files and submitting data... This may take a few moments.
                      </p>
+                  )}
+
+                  {modalVisible && (
+                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                        <div className="bg-black p-6 rounded-lg shadow-lg max-w-md w-full">
+                           <h2 className="text-xl font-bold mb-4">Portfolio url</h2>
+                           <pre className="bg-black p-4 rounded text-sm overflow-auto">
+                              {`http://${window.location.hostname}/me/${portfolioData.newPortfolio.slug}`}
+                              {/* {JSON.stringify(portfolioData)} */}
+                           </pre>
+                           <button onClick={() => setModalVisible(false)} className="mt-4 btn-secondary">
+                              Close
+                           </button>
+                        </div>
+                     </div>
                   )}
                </div>
             </form>

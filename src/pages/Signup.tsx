@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,9 +16,16 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { signup } = useAuth();
+  const { signup, isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Redirect if user is already authenticated
+  useEffect(() => {
+    if (!loading && isAuthenticated) {
+      navigate('/profile', { replace: true });
+    }
+  }, [isAuthenticated, loading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,8 +55,11 @@ const Signup = () => {
         title: "Success",
         description: "Account created successfully! Welcome to our platform.",
       });
-      // Redirect to profile or dashboard
-      navigate("/profile");
+      
+      // Add a small delay to ensure auth state is updated before navigation
+      setTimeout(() => {
+        navigate('/profile', { replace: true });
+      }, 1000);
     } catch (error) {
       toast({
         title: "Signup Failed",
