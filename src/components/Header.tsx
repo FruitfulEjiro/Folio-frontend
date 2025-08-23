@@ -62,7 +62,7 @@ const Header = () => {
         </nav>
 
         <div className="flex items-center gap-3">
-          {/* {isAuthenticated ? (
+          {/* {/* {isAuthenticated ? ( */}
             <>
               <Button 
                 onClick={handleGeneratePortfolio}
@@ -74,7 +74,7 @@ const Header = () => {
                 Generate Portfolio
               </Button>
               
-              <DropdownMenu>
+              {/* <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Avatar className="h-8 w-8">
@@ -109,17 +109,17 @@ const Header = () => {
                     <span>Log out</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
-              </DropdownMenu>
+              </DropdownMenu> */}
             </>
-          ) : ( */}
-            <>
+          {/* ) : ( }*/} 
+            {/* <>
               <Link to="/login">
                 <Button variant="ghost">Login</Button>
               </Link>
               <Link to="/signup">
                 <Button variant="gradient">Get Started</Button>
               </Link>
-            </>
+            </> */}
           {/* )} */}
         </div>
       </div>

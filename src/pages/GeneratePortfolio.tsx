@@ -308,10 +308,10 @@ const GeneratePortfolio = () => {
             description: "Your portfolio has been generated successfully!",
          });
 
-         console.log("Portfolio created:", result.newPortfolio);
 
          // Reset form or redirect to portfolio
          // window.location.href = `/portfolio/${result.portfolioId}`;
+         window.location.href = `/me/${result.newPortfolio.slug}`;
       } catch (error) {
          console.error("Submission error:", error);
          toast({
