@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Header from "@/components/Header";
 import { ArrowRight, Zap, Palette, Users, Star } from "lucide-react";
-import heroImage from "@/assets/hero-image.jpeg"
+import heroImage from "@/assets/hero-image.jpg"
 
 const Landing = () => {
   return (
