@@ -47,13 +47,13 @@ const Landing = () => {
         </div>
         
         {/* Hero Image */}
-        <div className="relative max-w-5xl mx-auto px-4">
+        {/* <div className="relative max-w-5xl mx-auto px-4">
           <img 
             src={heroImage} 
             alt="Portfolio Generation Platform" 
             className="w-full rounded-2xl shadow-card border border-border"
           />
-        </div>
+        </div> */}
       </section>
 
       {/* Features Section */}
